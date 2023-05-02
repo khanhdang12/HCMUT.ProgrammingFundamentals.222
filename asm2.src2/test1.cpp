@@ -456,7 +456,6 @@ void KnightAdventure::run()
         armyKnights->arrArmy[i].printlist();
     }
     cout << endl;
-    
 }
 
 int main()

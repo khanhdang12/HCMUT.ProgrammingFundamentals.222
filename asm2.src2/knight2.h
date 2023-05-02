@@ -13,109 +13,13 @@ enum ItemType
     phoenixDownII,
     phoenixDownIII,
     phoenixDownIV,
-    Antidote
+    Antidote,
+    FirstPhoenixDown
 };
+
+class BaseItem;
 
 class BaseKnight;
-
-class BaseItem
-{
-public:
-    ItemType itemType;
-    BaseItem *next;
-    virtual bool canUse(BaseKnight *knight) = 0;
-    virtual void use(BaseKnight *knight) = 0;
-};
-
-class classPhoenixI : public BaseItem
-{
-public:
-    classPhoenixI()
-    {
-        itemType = phoenixDownI;
-        next = nullptr;
-    }
-    bool canUse(BaseKnight *knight)
-    {
-        return false;
-    }
-    void use(BaseKnight *knight)
-    {
-
-    }
-};
-
-class classPhoenixII : public BaseItem
-{
-public:
-    classPhoenixII()
-    {
-        itemType = phoenixDownII;
-        next = nullptr;
-    }
-    bool canUse(BaseKnight *knight)
-    {
-        return false;
-    }
-    void use(BaseKnight *knight)
-    {
-
-    }
-};
-
-class classPhoenixIII : public BaseItem
-{
-public:
-    classPhoenixIII()
-    {
-        itemType = phoenixDownIII;
-        next = nullptr;
-    }
-    bool canUse(BaseKnight *knight)
-    {
-        return false;
-    }
-    void use(BaseKnight *knight)
-    {
-
-    }
-};
-
-class classPhoenixIV : public BaseItem
-{
-public:
-    classPhoenixIV()
-    {
-        itemType = phoenixDownIV;
-        next = nullptr; 
-    }
-    bool canUse(BaseKnight *knight)
-    {
-        return false;
-    }
-    void use(BaseKnight *knight)
-    {
-
-    }
-};
-
-class classAntidote : public BaseItem
-{
-public:    
-    classAntidote()
-    {
-        itemType = Antidote;
-        next = nullptr;
-    }
-    bool canUse(BaseKnight *knight)
-    {
-        return false;
-    }
-    void use(BaseKnight *knight)
-    {
-
-    }
-};
 
 class BaseBag
 {
@@ -123,47 +27,20 @@ public:
     BaseKnight *knight;
     BaseItem *head;
     int sizeBag;
+    int maxSize;
     BaseBag();
 
     void insertBag(ItemType item);
-    bool swapBag(ItemType item);
+    void swapBag(BaseItem *item);
     void deleteBag();
+
     void print();
     void printlist();
-    virtual bool insertFirst(BaseItem *item); // co the bo do vao tui hay khong tuy theo gioi han tui
+    virtual bool insertFirst(BaseItem *item); 
     virtual BaseItem *get(ItemType itemType);
     virtual string toString() const;
+    // virtual ~BaseBag() {}
 };
-
-class DragonBag : BaseBag
-{
-    virtual bool insertFirst(BaseItem *item); // co the bo do vao tui hay khong tuy theo gioi han tui
-    virtual BaseItem *get(ItemType itemType);
-    virtual string toString() const;
-};
-
-class LancelotBag : BaseBag
-{
-    virtual bool insertFirst(BaseItem *item); // co the bo do vao tui hay khong tuy theo gioi han tui
-    virtual BaseItem *get(ItemType itemType);
-    virtual string toString() const;
-};
-
-class PaladinBag : BaseBag
-{
-    virtual bool insertFirst(BaseItem *item); // co the bo do vao tui hay khong tuy theo gioi han tui
-    virtual BaseItem *get(ItemType itemType);
-    virtual string toString() const;
-};
-
-class NormalBag : BaseBag
-{
-    virtual bool insertFirst(BaseItem *item); // co the bo do vao tui hay khong tuy theo gioi han tui
-    virtual BaseItem *get(ItemType itemType);
-    virtual string toString() const;
-};
-
-class BaseOpponent;
 
 enum KnightType
 {
@@ -188,6 +65,13 @@ protected:
 
 public:
     BaseKnight();
+    ~BaseKnight()
+    {
+        delete bag;
+    }
+
+    void print();
+    void printlist();
 
     int getId() { return id; }
     void setId(int id1) { id = id1; }
@@ -214,10 +98,351 @@ public:
     void setKnightType(int hpget);
 
     BaseBag *getBag() { return bag; }
+
     void setBag(ItemType item, int size);
     static BaseKnight *create(int id, int maxhp, int level, int gil, int antidote, int phoenixdownI);
     string toString() const;
 };
+
+class DragonBag : public BaseBag
+{
+    DragonBag()
+    {
+        maxSize = maxDragonBag;
+    }
+
+    // bool insertFirst(BaseItem *item)
+    // {
+    //     return true;
+    // }
+
+    BaseItem *get(ItemType itemType)
+    {
+        BaseItem * haha = nullptr;
+        return haha;
+    }
+    string toString() 
+    {
+        return "1";
+    }
+};
+
+class LancelotBag : public BaseBag
+{
+    LancelotBag()
+    {
+        maxSize = maxLancelotBag;
+    }
+
+    // bool insertFirst(BaseItem *item)
+    // {
+    //     return true;
+    // }
+    BaseItem *get(ItemType itemType)
+    {
+        BaseItem * haha = nullptr;
+        return haha;
+    }
+    string toString() 
+    {
+        return "1";
+    }
+};
+
+class PaladinBag : public BaseBag
+{
+    PaladinBag()
+    {
+        maxSize = -1;
+    }
+
+    // bool insertFirst(BaseItem *item)
+    // {
+    //     return true;
+    // }
+    BaseItem *get(ItemType itemType)
+    {
+        BaseItem * haha = nullptr;
+        return haha;
+    }
+    string toString() 
+    {
+        return "1";
+    }
+};
+
+class NormalBag : public BaseBag
+{
+    NormalBag()
+    {
+        maxSize = maxNormalBag;
+    }
+
+    // bool insertFirst(BaseItem *item)
+    // {
+    //     return true;
+    // }
+    BaseItem *get(ItemType itemType)
+    {
+        BaseItem * haha = nullptr;
+        return haha;
+    }
+    string toString() 
+    {
+        return "1";
+    }
+};
+
+class BaseOpponent
+{
+public:
+    int baseDamage;
+    int gilIfWin;
+    int levelO;
+};
+
+class MadBear: public BaseOpponent
+{   
+public:
+    MadBear(int levelIn)
+    {
+        baseDamage = 10;
+        gilIfWin = 100;
+        levelO = levelIn;
+    }
+};
+
+class Bandit: public BaseOpponent
+{
+public:
+    Bandit(int levelIn)
+    {
+        baseDamage = 15;
+        gilIfWin = 150;
+        levelO = levelIn;
+    }
+};
+
+class LordLupin: public BaseOpponent
+{
+public:
+    LordLupin(int levelIn)
+    {
+        baseDamage = 45;
+        gilIfWin = 450;
+        levelO = levelIn;
+    }
+};
+
+class Elf: public BaseOpponent
+{
+public:
+    Elf(int levelIn)
+    {
+        baseDamage = 75;
+        gilIfWin = 750;
+        levelO = levelIn;
+    }
+};
+
+class Troll: public BaseOpponent
+{
+public:
+    Troll(int levelIn)
+    {
+        baseDamage = 95;
+        gilIfWin = 800;
+        levelO = levelIn;
+    }
+};
+
+class Tornbery: public BaseOpponent
+{
+
+};
+
+class QueenOfCards: public BaseOpponent
+{
+
+};
+
+class NinaDeRings:public BaseOpponent
+{
+
+};
+
+class DurianGarden:public BaseOpponent
+{
+
+};
+
+class OmegaWeapon:public BaseOpponent
+{
+
+};
+
+class Hades:public BaseOpponent
+{
+
+};
+
+class BaseItem
+{
+public:
+    ItemType itemType;
+    BaseItem *next;
+    BaseItem()
+    {
+        next = nullptr;
+    }
+    virtual bool canUse(BaseKnight *knight) = 0;
+    virtual void use(BaseKnight *knight) = 0;
+};
+
+class classPhoenixI : public BaseItem
+{
+public:
+    classPhoenixI()
+    {
+        itemType = phoenixDownI;
+        next = nullptr;
+    }
+    bool canUse(BaseKnight *knight)
+    {
+        int hp = knight->getHp();
+        if (hp <= 0)
+        {
+            return true;
+        }
+        return false;
+    }
+    void use(BaseKnight *knight)
+    {
+        int hp = knight->getHp();
+        int maxhp = knight->getMaxhp();
+        hp = maxhp;
+        knight->setHp(hp);
+        knight->getBag()->deleteBag();
+    }
+};
+
+class classPhoenixII : public BaseItem
+{
+public:
+    classPhoenixII()
+    {
+        itemType = phoenixDownII;
+        next = nullptr;
+    }
+    bool canUse(BaseKnight *knight)
+    {
+        int hp = knight->getHp();
+        int maxhp = knight->getMaxhp();
+        if (hp < maxhp / 4)
+        {
+            return true;
+        }
+        return false;
+    }
+    void use(BaseKnight *knight)
+    {
+        int hp = knight->getHp();
+        int maxhp = knight->getMaxhp();
+        hp = maxhp;
+        knight->setHp(hp);
+        knight->getBag()->deleteBag();
+    }
+};
+
+class classPhoenixIII : public BaseItem
+{
+public:
+    classPhoenixIII()
+    {
+        itemType = phoenixDownIII;
+        next = nullptr;
+    }
+    bool canUse(BaseKnight *knight)
+    {
+        int hp = knight->getHp();
+        int maxhp = knight->getMaxhp();
+        if (hp < maxhp / 3)
+        {
+            return true;
+        }
+        return false;
+    }
+    void use(BaseKnight *knight)
+    {
+        int hp = knight->getHp();
+        int maxhp = knight->getMaxhp();
+        if (hp <= 0)
+        {
+            hp = maxhp / 3;
+        }
+        else
+        {
+            hp += maxhp / 4;
+        }
+        knight->setHp(hp);
+        knight->getBag()->deleteBag();
+    }
+};
+
+class classPhoenixIV : public BaseItem
+{
+public:
+    classPhoenixIV()
+    {
+        itemType = phoenixDownIV;
+        next = nullptr; 
+    }
+    bool canUse(BaseKnight *knight)
+    {
+        int hp = knight->getHp();
+        int maxhp = knight->getMaxhp();
+        if (hp < maxhp / 2)
+        {
+            return true;
+        }
+        return false;
+    }
+    void use(BaseKnight *knight)
+    {
+        int hp = knight->getHp();
+        int maxhp = knight->getMaxhp();
+        if (hp <= 0)
+        {
+            hp = maxhp / 2;
+        }
+        else
+        {
+            hp += maxhp / 5;
+        }
+        knight->setHp(hp);
+        knight->getBag()->deleteBag();
+    }
+};
+
+class classAntidote : public BaseItem
+{
+public:    
+    classAntidote()
+    {
+        itemType = Antidote;
+        next = nullptr;
+    }
+    bool canUse(BaseKnight *knight)
+    {
+        return true;
+    }
+    void use(BaseKnight *knight)
+    {
+        return;
+    }
+};
+
+
 
 class Events;
 
@@ -238,8 +463,6 @@ public:
     bool hasGuinevereHair() const;
     bool hasExcaliburSword() const;
 
-    // void printInfo() const;
-    // void printResult(bool win) const;
 };
 
 class Events
