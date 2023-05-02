@@ -23,6 +23,10 @@ class BaseItem
 public:
     ItemType itemType;
     BaseItem *next;
+    BaseItem()
+    {
+        next = nullptr;
+    }
     virtual bool canUse(BaseKnight *knight) = 0;
     virtual void use(BaseKnight *knight) = 0;
 };
@@ -123,47 +127,201 @@ public:
     BaseKnight *knight;
     BaseItem *head;
     int sizeBag;
+    int maxSize;
     BaseBag();
 
-    void insertBag(ItemType item);
-    bool swapBag(ItemType item);
-    void deleteBag();
+    // void insertBag(ItemType item);
+    // bool swapBag(ItemType item);
+    // void deleteBag();
     void print();
     void printlist();
-    virtual bool insertFirst(BaseItem *item); // co the bo do vao tui hay khong tuy theo gioi han tui
+    virtual bool insertFirst(BaseItem *item); 
     virtual BaseItem *get(ItemType itemType);
     virtual string toString() const;
+    // virtual ~BaseBag() {}
 };
 
-class DragonBag : BaseBag
+class DragonBag : public BaseBag
 {
-    virtual bool insertFirst(BaseItem *item); // co the bo do vao tui hay khong tuy theo gioi han tui
-    virtual BaseItem *get(ItemType itemType);
-    virtual string toString() const;
+    DragonBag()
+    {
+        maxSize = maxDragonBag;
+    }
+
+    // bool insertFirst(BaseItem *item)
+    // {
+    //     return true;
+    // }
+
+    BaseItem *get(ItemType itemType)
+    {
+        BaseItem * haha = nullptr;
+        return haha;
+    }
+    string toString() 
+    {
+        return "1";
+    }
 };
 
-class LancelotBag : BaseBag
+class LancelotBag : public BaseBag
 {
-    virtual bool insertFirst(BaseItem *item); // co the bo do vao tui hay khong tuy theo gioi han tui
-    virtual BaseItem *get(ItemType itemType);
-    virtual string toString() const;
+    LancelotBag()
+    {
+        maxSize = maxLancelotBag;
+    }
+
+    // bool insertFirst(BaseItem *item)
+    // {
+    //     return true;
+    // }
+    BaseItem *get(ItemType itemType)
+    {
+        BaseItem * haha = nullptr;
+        return haha;
+    }
+    string toString() 
+    {
+        return "1";
+    }
 };
 
-class PaladinBag : BaseBag
+class PaladinBag : public BaseBag
 {
-    virtual bool insertFirst(BaseItem *item); // co the bo do vao tui hay khong tuy theo gioi han tui
-    virtual BaseItem *get(ItemType itemType);
-    virtual string toString() const;
+    PaladinBag()
+    {
+        maxSize = -1;
+    }
+
+    // bool insertFirst(BaseItem *item)
+    // {
+    //     return true;
+    // }
+    BaseItem *get(ItemType itemType)
+    {
+        BaseItem * haha = nullptr;
+        return haha;
+    }
+    string toString() 
+    {
+        return "1";
+    }
 };
 
-class NormalBag : BaseBag
+class NormalBag : public BaseBag
 {
-    virtual bool insertFirst(BaseItem *item); // co the bo do vao tui hay khong tuy theo gioi han tui
-    virtual BaseItem *get(ItemType itemType);
-    virtual string toString() const;
+    NormalBag()
+    {
+        maxSize = maxNormalBag;
+    }
+
+    // bool insertFirst(BaseItem *item)
+    // {
+    //     return true;
+    // }
+    BaseItem *get(ItemType itemType)
+    {
+        BaseItem * haha = nullptr;
+        return haha;
+    }
+    string toString() 
+    {
+        return "1";
+    }
 };
 
-class BaseOpponent;
+class BaseOpponent
+{
+public:
+    int baseDamage;
+    int gilIfWin;
+    int levelO;
+};
+
+class MadBear: public BaseOpponent
+{   
+public:
+    MadBear(int levelIn)
+    {
+        baseDamage = 10;
+        gilIfWin = 100;
+        levelO = levelIn;
+    }
+};
+
+class Bandit: public BaseOpponent
+{
+public:
+    Bandit(int levelIn)
+    {
+        baseDamage = 15;
+        gilIfWin = 150;
+        levelO = levelIn;
+    }
+};
+
+class LordLupin: public BaseOpponent
+{
+public:
+    LordLupin(int levelIn)
+    {
+        baseDamage = 45;
+        gilIfWin = 450;
+        levelO = levelIn;
+    }
+};
+
+class Elf: public BaseOpponent
+{
+public:
+    Elf(int levelIn)
+    {
+        baseDamage = 75;
+        gilIfWin = 750;
+        levelO = levelIn;
+    }
+};
+
+class Troll: public BaseOpponent
+{
+public:
+    Troll(int levelIn)
+    {
+        baseDamage = 95;
+        gilIfWin = 800;
+        levelO = levelIn;
+    }
+};
+
+class Tornbery: public BaseOpponent
+{
+
+};
+
+class QueenOfCards: public BaseOpponent
+{
+
+};
+
+class NinaDeRings:public BaseOpponent
+{
+
+};
+
+class DurianGarden:public BaseOpponent
+{
+
+};
+
+class OmegaWeapon:public BaseOpponent
+{
+
+};
+
+class Hades:public BaseOpponent
+{
+
+};
 
 enum KnightType
 {
@@ -188,6 +346,13 @@ protected:
 
 public:
     BaseKnight();
+    ~BaseKnight()
+    {
+        delete bag;
+    }
+
+    void print();
+    void printlist();
 
     int getId() { return id; }
     void setId(int id1) { id = id1; }
@@ -214,6 +379,7 @@ public:
     void setKnightType(int hpget);
 
     BaseBag *getBag() { return bag; }
+
     void setBag(ItemType item, int size);
     static BaseKnight *create(int id, int maxhp, int level, int gil, int antidote, int phoenixdownI);
     string toString() const;
@@ -238,8 +404,6 @@ public:
     bool hasGuinevereHair() const;
     bool hasExcaliburSword() const;
 
-    // void printInfo() const;
-    // void printResult(bool win) const;
 };
 
 class Events
