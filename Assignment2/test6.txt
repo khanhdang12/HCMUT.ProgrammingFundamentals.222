@@ -1,0 +1,33 @@
+----- file: tc58_armyknights -----
+2
+12 10 0 50 0
+12 9 0 1 0
+----- file: tc58_events -----
+12
+6 9 10 95 10 96 10 97 10 98 10 99
+
+No. knights: 2;[Knight:id:2,hp:12,maxhp:12,level:10,gil:1,Bag[count=0;],knight_type:NORMAL];PaladinShield:0;LancelotSpear:0;GuinevereHair:0;ExcaliburSword:0
+--------------------------------------------------
+No. knights: 2;[Knight:id:2,hp:12,maxhp:12,level:10,gil:1,Bag[count=0;],knight_type:NORMAL];PaladinShield:0;LancelotSpear:0;GuinevereHair:0;ExcaliburSword:0
+--------------------------------------------------
+No. knights: 2;[Knight:id:2,hp:12,maxhp:12,level:10,gil:999,Bag[count=0;],knight_type:NORMAL];PaladinShield:0;LancelotSpear:0;GuinevereHair:0;ExcaliburSword:0
+--------------------------------------------------
+No. knights: 2;[Knight:id:2,hp:12,maxhp:12,level:10,gil:999,Bag[count=0;],knight_type:NORMAL];PaladinShield:1;LancelotSpear:0;GuinevereHair:0;ExcaliburSword:0
+--------------------------------------------------
+No. knights: 2;[Knight:id:2,hp:12,maxhp:12,level:10,gil:999,Bag[count=0;],knight_type:NORMAL];PaladinShield:1;LancelotSpear:0;GuinevereHair:0;ExcaliburSword:0
+--------------------------------------------------
+No. knights: 2;[Knight:id:2,hp:12,maxhp:12,level:10,gil:999,Bag[count=0;],knight_type:NORMAL];PaladinShield:1;LancelotSpear:1;GuinevereHair:0;ExcaliburSword:0
+--------------------------------------------------
+No. knights: 2;[Knight:id:2,hp:12,maxhp:12,level:10,gil:999,Bag[count=0;],knight_type:NORMAL];PaladinShield:1;LancelotSpear:1;GuinevereHair:0;ExcaliburSword:0
+--------------------------------------------------
+No. knights: 2;[Knight:id:2,hp:12,maxhp:12,level:10,gil:999,Bag[count=0;],knight_type:NORMAL];PaladinShield:1;LancelotSpear:1;GuinevereHair:1;ExcaliburSword:0
+--------------------------------------------------
+No. knights: 2;[Knight:id:2,hp:12,maxhp:12,level:10,gil:999,Bag[count=0;],knight_type:NORMAL];PaladinShield:1;LancelotSpear:1;GuinevereHair:1;ExcaliburSword:0
+--------------------------------------------------
+No. knights: 2;[Knight:id:2,hp:12,maxhp:12,level:10,gil:999,Bag[count=0;],knight_type:NORMAL];PaladinShield:1;LancelotSpear:1;GuinevereHair:1;ExcaliburSword:1
+--------------------------------------------------
+No. knights: 2;[Knight:id:2,hp:12,maxhp:12,level:10,gil:999,Bag[count=0;],knight_type:NORMAL];PaladinShield:1;LancelotSpear:1;GuinevereHair:1;ExcaliburSword:1
+--------------------------------------------------
+No. knights: 2;[Knight:id:2,hp:12,maxhp:12,level:10,gil:999,Bag[count=0;],knight_type:NORMAL];PaladinShield:1;LancelotSpear:1;GuinevereHair:1;ExcaliburSword:1
+--------------------------------------------------
+WIN

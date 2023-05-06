@@ -1,0 +1,28 @@
+----- file: tc4_armyknights -----
+1
+20 2 5 999 0
+----- file: tc4_events -----
+10
+95 96 97 98 1 98 97 96 95 99
+
+No. knights: 1;[Knight:id:1,hp:20,maxhp:20,level:2,gil:999,Bag[count=5;PhoenixI,PhoenixI,PhoenixI,PhoenixI,PhoenixI],knight_type:NORMAL];PaladinShield:1;LancelotSpear:0;GuinevereHair:0;ExcaliburSword:0
+--------------------------------------------------
+No. knights: 1;[Knight:id:1,hp:20,maxhp:20,level:2,gil:999,Bag[count=5;PhoenixI,PhoenixI,PhoenixI,PhoenixI,PhoenixI],knight_type:NORMAL];PaladinShield:1;LancelotSpear:1;GuinevereHair:0;ExcaliburSword:0
+--------------------------------------------------
+No. knights: 1;[Knight:id:1,hp:20,maxhp:20,level:2,gil:999,Bag[count=5;PhoenixI,PhoenixI,PhoenixI,PhoenixI,PhoenixI],knight_type:NORMAL];PaladinShield:1;LancelotSpear:1;GuinevereHair:1;ExcaliburSword:0
+--------------------------------------------------
+No. knights: 1;[Knight:id:1,hp:20,maxhp:20,level:2,gil:999,Bag[count=5;PhoenixI,PhoenixI,PhoenixI,PhoenixI,PhoenixI],knight_type:NORMAL];PaladinShield:1;LancelotSpear:1;GuinevereHair:1;ExcaliburSword:1
+--------------------------------------------------
+No. knights: 1;[Knight:id:1,hp:20,maxhp:20,level:2,gil:999,Bag[count=4;PhoenixI,PhoenixI,PhoenixI,PhoenixI],knight_type:NORMAL];PaladinShield:1;LancelotSpear:1;GuinevereHair:1;ExcaliburSword:1
+--------------------------------------------------
+No. knights: 1;[Knight:id:1,hp:20,maxhp:20,level:2,gil:999,Bag[count=4;PhoenixI,PhoenixI,PhoenixI,PhoenixI],knight_type:NORMAL];PaladinShield:1;LancelotSpear:1;GuinevereHair:1;ExcaliburSword:1
+--------------------------------------------------
+No. knights: 1;[Knight:id:1,hp:20,maxhp:20,level:2,gil:999,Bag[count=4;PhoenixI,PhoenixI,PhoenixI,PhoenixI],knight_type:NORMAL];PaladinShield:1;LancelotSpear:1;GuinevereHair:1;ExcaliburSword:1
+--------------------------------------------------
+No. knights: 1;[Knight:id:1,hp:20,maxhp:20,level:2,gil:999,Bag[count=4;PhoenixI,PhoenixI,PhoenixI,PhoenixI],knight_type:NORMAL];PaladinShield:1;LancelotSpear:1;GuinevereHair:1;ExcaliburSword:1
+--------------------------------------------------
+No. knights: 1;[Knight:id:1,hp:20,maxhp:20,level:2,gil:999,Bag[count=4;PhoenixI,PhoenixI,PhoenixI,PhoenixI],knight_type:NORMAL];PaladinShield:1;LancelotSpear:1;GuinevereHair:1;ExcaliburSword:1
+--------------------------------------------------
+No. knights: 1;[Knight:id:1,hp:20,maxhp:20,level:2,gil:999,Bag[count=4;PhoenixI,PhoenixI,PhoenixI,PhoenixI],knight_type:NORMAL];PaladinShield:1;LancelotSpear:1;GuinevereHair:1;ExcaliburSword:1
+--------------------------------------------------
+WIN

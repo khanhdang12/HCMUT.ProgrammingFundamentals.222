@@ -1,0 +1,20 @@
+----- file: tc1_armyknights -----
+1
+500 5 0 899 0
+----- file: tc1_events -----
+6
+1 95 96 97 98 99
+
+No. knights: 1;[Knight:id:1,hp:500,maxhp:500,level:5,gil:999,Bag[count=0;],knight_type:NORMAL];PaladinShield:0;LancelotSpear:0;GuinevereHair:0;ExcaliburSword:0
+--------------------------------------------------
+No. knights: 1;[Knight:id:1,hp:500,maxhp:500,level:5,gil:999,Bag[count=0;],knight_type:NORMAL];PaladinShield:1;LancelotSpear:0;GuinevereHair:0;ExcaliburSword:0
+--------------------------------------------------
+No. knights: 1;[Knight:id:1,hp:500,maxhp:500,level:5,gil:999,Bag[count=0;],knight_type:NORMAL];PaladinShield:1;LancelotSpear:1;GuinevereHair:0;ExcaliburSword:0
+--------------------------------------------------
+No. knights: 1;[Knight:id:1,hp:500,maxhp:500,level:5,gil:999,Bag[count=0;],knight_type:NORMAL];PaladinShield:1;LancelotSpear:1;GuinevereHair:1;ExcaliburSword:0
+--------------------------------------------------
+No. knights: 1;[Knight:id:1,hp:500,maxhp:500,level:5,gil:999,Bag[count=0;],knight_type:NORMAL];PaladinShield:1;LancelotSpear:1;GuinevereHair:1;ExcaliburSword:1
+--------------------------------------------------
+No. knights: 1;[Knight:id:1,hp:500,maxhp:500,level:5,gil:999,Bag[count=0;],knight_type:NORMAL];PaladinShield:1;LancelotSpear:1;GuinevereHair:1;ExcaliburSword:1
+--------------------------------------------------
+WIN

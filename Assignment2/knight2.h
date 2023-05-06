@@ -63,7 +63,9 @@ protected:
     BaseBag *bag;
     KnightType knightType;
 
+
 public:
+    float knightBaseDamage;
     BaseKnight();
     ~BaseKnight()
     {
@@ -88,14 +90,14 @@ public:
     int getGil() { return gil; }
     void setGil(int gil1) { gil = gil1; }
 
-    int getAntidote() { return antidote; }
-    void setAntidote(int antidote1) { antidote = antidote1; }
+    // int getAntidote() { return antidote; }
+    // void setAntidote(int antidote1) { antidote = antidote1; }
 
-    int getPhoenixdownI() { return phoenixdownI; }
-    void setPhoenixdownI(int phoenixdownI1) { phoenixdownI = phoenixdownI1; }
+    // int getPhoenixdownI() { return phoenixdownI; }
+    // void setPhoenixdownI(int phoenixdownI1) { phoenixdownI = phoenixdownI1; }
 
-    int getKnightType() { return knightType; }
-    void setKnightType(int hpget);
+    KnightType getKnightType() { return knightType; }
+    void setKnightType(KnightType typ) {knightType = typ;}
 
     BaseBag *getBag() { return bag; }
 
@@ -104,92 +106,39 @@ public:
     string toString() const;
 };
 
-class DragonBag : public BaseBag
+class PaladinKnight: public BaseKnight
 {
-    DragonBag()
+    public:
+    PaladinKnight()
     {
-        maxSize = maxDragonBag;
-    }
-
-    // bool insertFirst(BaseItem *item)
-    // {
-    //     return true;
-    // }
-
-    BaseItem *get(ItemType itemType)
-    {
-        BaseItem * haha = nullptr;
-        return haha;
-    }
-    string toString() 
-    {
-        return "1";
+        knightBaseDamage = 0.06;
     }
 };
 
-class LancelotBag : public BaseBag
+class LancelotKnight: public BaseKnight
 {
-    LancelotBag()
+    public:
+    LancelotKnight()
     {
-        maxSize = maxLancelotBag;
-    }
-
-    // bool insertFirst(BaseItem *item)
-    // {
-    //     return true;
-    // }
-    BaseItem *get(ItemType itemType)
-    {
-        BaseItem * haha = nullptr;
-        return haha;
-    }
-    string toString() 
-    {
-        return "1";
+        knightBaseDamage = 0.05;
     }
 };
 
-class PaladinBag : public BaseBag
+class DragonKnight: public BaseKnight
 {
-    PaladinBag()
+    public:
+    DragonKnight()
     {
-        maxSize = -1;
-    }
-
-    // bool insertFirst(BaseItem *item)
-    // {
-    //     return true;
-    // }
-    BaseItem *get(ItemType itemType)
-    {
-        BaseItem * haha = nullptr;
-        return haha;
-    }
-    string toString() 
-    {
-        return "1";
+        knightBaseDamage = 0.075;
     }
 };
 
-class NormalBag : public BaseBag
+class NormalKnight: public BaseKnight
 {
-    NormalBag()
+    public:
+    NormalKnight()
     {
-        maxSize = maxNormalBag;
-    }
-
-    // bool insertFirst(BaseItem *item)
-    // {
-    //     return true;
-    // }
-    BaseItem *get(ItemType itemType)
-    {
-        BaseItem * haha = nullptr;
-        return haha;
-    }
-    string toString() 
-    {
-        return "1";
+        knightBaseDamage = 0;
     }
 };
 
@@ -285,7 +234,7 @@ public:
 class NinaDeRings:public BaseOpponent
 {
 public:
-    NinaDeRings(int levelIn)
+    NinaDeRings()
     {
         eventNum = 8;
     }
@@ -294,7 +243,7 @@ public:
 class DurianGarden:public BaseOpponent
 {
 public:
-    DurianGarden(int levelIn)
+    DurianGarden()
     {
         eventNum = 9;
     }
@@ -303,7 +252,7 @@ public:
 class OmegaWeapon:public BaseOpponent
 {
 public:
-    OmegaWeapon(int levelIn)
+    OmegaWeapon()
     {
         eventNum = 10;
     }
@@ -312,9 +261,18 @@ public:
 class Hades:public BaseOpponent
 {
 public:
-    Hades(int levelIn)
+    Hades()
     {
         eventNum = 11;
+    }
+};
+
+class Ultimecia: public BaseOpponent
+{
+public:
+    Ultimecia()
+    {
+        eventNum = 99;
     }
 };
 
@@ -353,6 +311,7 @@ public:
         int hp = knight->getHp();
         int maxhp = knight->getMaxhp();
         hp = maxhp;
+        // cout << hp << endl;
         knight->setHp(hp);
         knight->getBag()->deleteBag();
         knight->getBag()->sizeBag -= 1;
@@ -480,31 +439,6 @@ public:
     }
 };
 
-class Events;
-
-class ArmyKnights
-{
-public:
-    bool PaladinShield;
-    bool LancelotSpear;
-    bool GuinevereHair;
-    bool ExcaliburSword;
-    bool hasPaladinShield() const;
-    bool hasLancelotSpear() const;
-    bool hasGuinevereHair() const;
-    bool hasExcaliburSword() const;
-
-    BaseKnight *arrArmy;
-    int sizeArmy;
-
-    ArmyKnights(const string &file_armyknights);
-    ~ArmyKnights();
-    bool fight(BaseOpponent *opponent);
-    bool adventure(Events *events);
-    int count() const;
-    BaseKnight *lastKnight() const;
-};
-
 class Events
 {
 public:
@@ -515,6 +449,60 @@ public:
 
     int count() const;
     int get(int i) const;
+};
+
+class ArmyKnights
+{
+public:
+    bool PaladinShield;
+    bool LancelotSpear;
+    bool GuinevereHair;
+    bool ExcaliburSword;
+    bool hasPaladinShield() const
+    {
+        if (PaladinShield) 
+        {
+            return true;
+        }
+        return false;
+    }
+    bool hasLancelotSpear() const
+    {
+        if (LancelotSpear) 
+        {
+            return true;
+        }
+        return false; 
+    }
+    bool hasGuinevereHair() const
+    {
+        if (GuinevereHair) 
+        {
+            return true;
+        }
+        return false; 
+    }
+    bool hasExcaliburSword() const
+    {
+        if (ExcaliburSword) 
+        {
+            return true;
+        }
+        return false; 
+    }
+
+    BaseKnight *arrArmy;
+    int sizeArmy;
+
+    ArmyKnights(const string &file_armyknights);
+    ~ArmyKnights();
+    bool fight(BaseOpponent *opponent);
+    bool adventure(Events *events);
+    int count() const;
+    BaseKnight *lastKnight() const;
+
+    void printInfo() const;
+    void printResult(bool win) const;
 };
 
 class KnightAdventure
