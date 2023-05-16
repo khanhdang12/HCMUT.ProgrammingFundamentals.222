@@ -13,7 +13,7 @@ enum ItemType
     phoenixDownII,
     phoenixDownIII,
     phoenixDownIV,
-    Antidote,
+    ANTIDOTE,
     FirstPhoenixDown
 };
 
@@ -27,19 +27,16 @@ public:
     BaseKnight *knight;
     BaseItem *head;
     int sizeBag;
-    int maxSize;
     BaseBag();
+    ~BaseBag();
 
     void insertBag(ItemType item);
     void swapBag(BaseItem *item);
     void deleteBag();
 
-    // void print();
-    // void printlist();
     virtual bool insertFirst(BaseItem *item); 
     virtual BaseItem *get(ItemType itemType);
     virtual string toString() const; //have to
-    // virtual ~BaseBag() {}
 };
 
 enum KnightType
@@ -58,15 +55,19 @@ protected:
     int maxhp;
     int level;
     int gil;
-    int antidote;
-    int phoenixdownI;
+    // int antidote;
+    // int phoenixdownI;
     BaseBag *bag;
     KnightType knightType;
 
-
 public:
     float knightBaseDamage;
-    BaseKnight();
+    int maxSize;
+
+    BaseKnight()
+    {
+        bag = nullptr;
+    }
     ~BaseKnight()
     {
         delete bag;
@@ -90,18 +91,13 @@ public:
     int getGil() { return gil; }
     void setGil(int gil1) { gil = gil1; }
 
-    // int getAntidote() { return antidote; }
-    // void setAntidote(int antidote1) { antidote = antidote1; }
-
-    // int getPhoenixdownI() { return phoenixdownI; }
-    // void setPhoenixdownI(int phoenixdownI1) { phoenixdownI = phoenixdownI1; }
-
     KnightType getKnightType() { return knightType; }
     void setKnightType(KnightType typ) {knightType = typ;}
 
+    void setBag(ItemType item, int size);
+    void set2(){bag = new BaseBag();}
     BaseBag *getBag() { return bag; }
 
-    void setBag(ItemType item, int size);
     static BaseKnight *create(int id, int maxhp, int level, int gil, int antidote, int phoenixdownI);
     string toString() const;
 };
@@ -111,6 +107,7 @@ class PaladinKnight: public BaseKnight
     public:
     PaladinKnight()
     {
+        maxSize = -1;
         knightBaseDamage = 0.06;
     }
 };
@@ -120,6 +117,7 @@ class LancelotKnight: public BaseKnight
     public:
     LancelotKnight()
     {
+        maxSize = maxLancelotBag;
         knightBaseDamage = 0.05;
     }
 };
@@ -129,6 +127,7 @@ class DragonKnight: public BaseKnight
     public:
     DragonKnight()
     {
+        maxSize = maxDragonBag;
         knightBaseDamage = 0.075;
     }
 };
@@ -138,6 +137,7 @@ class NormalKnight: public BaseKnight
     public:
     NormalKnight()
     {
+        maxSize = maxNormalBag;
         knightBaseDamage = 0;
     }
 };
@@ -285,14 +285,18 @@ public:
     {
         next = nullptr;
     }
+    // ~BaseItem()
+    // {
+    //     delete next;
+    // }
     virtual bool canUse(BaseKnight *knight) = 0;
     virtual void use(BaseKnight *knight) = 0;
 };
 
-class classPhoenixI : public BaseItem
+class PhoenixDownI : public BaseItem
 {
 public:
-    classPhoenixI()
+    PhoenixDownI()
     {
         itemType = phoenixDownI;
         next = nullptr;
@@ -308,6 +312,7 @@ public:
     }
     void use(BaseKnight *knight)
     {
+        // cout << "co zo use phoenixI\n";
         int hp = knight->getHp();
         int maxhp = knight->getMaxhp();
         hp = maxhp;
@@ -318,10 +323,10 @@ public:
     }
 };
 
-class classPhoenixII : public BaseItem
+class PhoenixDownII : public BaseItem
 {
 public:
-    classPhoenixII()
+    PhoenixDownII()
     {
         itemType = phoenixDownII;
         next = nullptr;
@@ -347,10 +352,10 @@ public:
     }
 };
 
-class classPhoenixIII : public BaseItem
+class PhoenixDownIII : public BaseItem
 {
 public:
-    classPhoenixIII()
+    PhoenixDownIII()
     {
         itemType = phoenixDownIII;
         next = nullptr;
@@ -384,10 +389,10 @@ public:
     }
 };
 
-class classPhoenixIV : public BaseItem
+class PhoenixDownIV : public BaseItem
 {
 public:
-    classPhoenixIV()
+    PhoenixDownIV()
     {
         itemType = phoenixDownIV;
         next = nullptr; 
@@ -420,12 +425,12 @@ public:
     }
 };
 
-class classAntidote : public BaseItem
+class Antidote : public BaseItem
 {
 public:    
-    classAntidote()
+    Antidote()
     {
-        itemType = Antidote;
+        itemType = ANTIDOTE;
         next = nullptr;
     }
     bool canUse(BaseKnight *knight)
@@ -458,6 +463,12 @@ public:
     bool LancelotSpear;
     bool GuinevereHair;
     bool ExcaliburSword;
+    BaseKnight *arrArmy;
+    // int sizeInitial;
+    int sizeArmy;
+
+    ArmyKnights(const string &file_armyknights);
+    ~ArmyKnights();
     bool hasPaladinShield() const
     {
         if (PaladinShield) 
@@ -490,19 +501,63 @@ public:
         }
         return false; 
     }
-
-    BaseKnight *arrArmy;
-    int sizeArmy;
-
-    ArmyKnights(const string &file_armyknights);
-    ~ArmyKnights();
     bool fight(BaseOpponent *opponent);
     bool adventure(Events *events);
     int count() const;
     BaseKnight *lastKnight() const;
-
     void printInfo() const;
     void printResult(bool win) const;
+    bool BleedToDeath()
+    {
+        BaseKnight * lastKnight = this -> lastKnight();
+        int hp = lastKnight -> getHp();
+        int gil = lastKnight -> getGil();
+        int maxhp = lastKnight -> getMaxhp();
+        
+        BaseItem * temp = lastKnight->getBag()->get(FirstPhoenixDown);
+        while (temp != nullptr)
+        {
+            lastKnight->getBag()->swapBag(temp);
+            temp->use(lastKnight);
+            int hpnew = lastKnight->getHp();
+            if (hpnew > 0)
+            {
+                return true;
+            }
+            temp = lastKnight->getBag()->get(FirstPhoenixDown);
+        }
+
+        if (gil >= 100)
+        {
+            gil -= 100;
+            hp = maxhp / 2;
+            lastKnight -> setGil(gil);
+            lastKnight -> setHp(hp);
+            return true;
+        }
+
+        // delete &arrArmy[sizeArmy - 1];
+        sizeArmy -= 1;        
+        return false;
+    }
+    void searchAndUse()
+    {
+        BaseKnight * lastKnight = this -> lastKnight();
+        BaseItem * temp = lastKnight-> getBag() -> head;
+        for (int i = 0; i < lastKnight-> getBag() -> sizeBag; i++)
+        {
+            if (temp ->itemType == phoenixDownI || temp ->itemType == phoenixDownII || temp ->itemType == phoenixDownIII || temp ->itemType == phoenixDownIV)
+            {
+                if (temp -> canUse(lastKnight))
+                {
+                    lastKnight->getBag()->swapBag(temp);
+                    temp->use(lastKnight);
+                    return;
+                }
+            }
+            temp = temp -> next;
+        }
+    }
 };
 
 class KnightAdventure

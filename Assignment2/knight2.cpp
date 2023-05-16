@@ -1,5 +1,7 @@
 #include "knight2.h"
 
+string output = "";
+
 bool isPrime(int n)
 {
     if (n < 2)
@@ -22,7 +24,6 @@ KnightType makeKnightType(int hpget)
     if (isPrime(hpget))
     {
         return PALADIN;
-
     }
 
     else if (hpget == 888)
@@ -39,14 +40,14 @@ KnightType makeKnightType(int hpget)
         temp = temp / 10;
         int x = temp % 10;
 
-        if ((hpget >= 100 && hpget <= 999) && (x * x + y * y == z * z || z * z + y * y == x * x || x * x + z * z == y * y))
+        if (((x > 0) && (y > 0) && (z > 0)) && (x * x + y * y == z * z || z * z + y * y == x * x || x * x + z * z == y * y))
         {
-            return  DRAGON;
+            return DRAGON;
         }
 
         else
         {
-            return  NORMAL;
+            return NORMAL;
         }
     }
 }
@@ -55,26 +56,42 @@ KnightType makeKnightType(int hpget)
 
 BaseBag::BaseBag()
 {
+    knight = nullptr;
     sizeBag = 0;
     head = nullptr;
 }
 
+BaseBag::~BaseBag()
+{
+    if (sizeBag > 0)
+    {
+        BaseItem *current = head;
+        while (current != nullptr)
+        {
+            BaseItem *temp = current;
+            current = current->next;
+            delete temp;
+        }
+    }
+}
+
 bool BaseBag::insertFirst(BaseItem *item)
 {
-    if (maxSize == -1 || sizeBag < maxSize)
+    int max = knight->maxSize;
+    if (max == -1 || sizeBag < max)
     {
-        if (maxSize == maxDragonBag && item->itemType == Antidote)
+        if (max == maxDragonBag && item->itemType == ANTIDOTE)
         {
-            if (knight -> getId() > 0)
+            if (knight->getId() > 0)
             {
-                BaseKnight * beforeKnight = knight - 1;
-                beforeKnight -> getBag() -> insertFirst(item);
+                BaseKnight *beforeKnight = knight - 1;
+                beforeKnight->getBag()->insertFirst(item);
             }
 
-            else if (knight -> getId() <= 0)
+            else if (knight->getId() <= 0)
             {
                 return false;
-            }    
+            }
         }
 
         item->next = head;
@@ -98,33 +115,33 @@ string BaseBag::toString() const
         temp = temp->next;
         iter += 1;
     }
-    
+
     s += "Bag[count=" + to_string(sizeBag) + ";";
     for (int i = 0; i < sizeBag; i++)
     {
         if (arr[i] == phoenixDownI)
         {
-            s += "PhoenixI"; 
-        } 
+            s += "PhoenixI";
+        }
         else if (arr[i] == phoenixDownII)
         {
-            s += "PhoenixII"; 
-        } 
+            s += "PhoenixII";
+        }
         else if (arr[i] == phoenixDownIII)
         {
-            s += "PhoenixIII"; 
-        } 
+            s += "PhoenixIII";
+        }
         else if (arr[i] == phoenixDownIV)
         {
-            s += "PhoenixIV"; 
-        } 
-        else if (arr[i] == Antidote)
+            s += "PhoenixIV";
+        }
+        else if (arr[i] == ANTIDOTE)
         {
-            s += "Antidote"; 
-        } 
+            s += "Antidote";
+        }
         if (i + 1 != sizeBag)
         {
-            s+= ",";
+            s += ",";
         }
     }
     s += "]";
@@ -135,35 +152,35 @@ void BaseBag::insertBag(ItemType item)
 {
     if (item == phoenixDownI)
     {
-        classPhoenixI *object = new classPhoenixI();
+        PhoenixDownI *object = new PhoenixDownI();
         object->next = head;
         head = object;
         sizeBag += 1;
     }
     else if (item == phoenixDownII)
     {
-        classPhoenixII *object = new classPhoenixII();
+        PhoenixDownII *object = new PhoenixDownII();
         object->next = head;
         head = object;
         sizeBag += 1;
     }
     else if (item == phoenixDownIII)
     {
-        classPhoenixIII *object = new classPhoenixIII();
+        PhoenixDownII *object = new PhoenixDownII();
         object->next = head;
         head = object;
         sizeBag += 1;
     }
     else if (item == phoenixDownIV)
     {
-        classPhoenixIV *object = new classPhoenixIV();
+        PhoenixDownIV *object = new PhoenixDownIV();
         object->next = head;
         head = object;
         sizeBag += 1;
     }
     else
     {
-        classAntidote *object = new classAntidote();
+        Antidote *object = new Antidote();
         object->next = head;
         head = object;
         sizeBag += 1;
@@ -182,11 +199,11 @@ BaseItem *BaseBag::get(ItemType itemType)
         BaseItem *temp = head;
         while (temp != nullptr)
         {
-            if (temp->itemType == phoenixDownI || temp->itemType == phoenixDownII ||temp->itemType == phoenixDownIII ||temp->itemType == phoenixDownIV)
+            if (temp->itemType == phoenixDownI || temp->itemType == phoenixDownII || temp->itemType == phoenixDownIII || temp->itemType == phoenixDownIV)
             {
                 return temp;
             }
-            temp = temp -> next;
+            temp = temp->next;
         }
         return nullptr;
     }
@@ -198,7 +215,7 @@ BaseItem *BaseBag::get(ItemType itemType)
         {
             return temp;
         }
-        temp = temp -> next;
+        temp = temp->next;
     }
     return nullptr;
 }
@@ -220,19 +237,14 @@ void BaseBag::deleteBag()
     {
         return;
     }
-    BaseItem * temp = head;
-    head = head -> next;
+    BaseItem *temp = head;
+    head = head->next;
     delete temp;
 }
 
 /* * * END implementation of class BaseBag * * */
 
 /* * * BEGIN implementation of class BaseKnight * * */
-
-BaseKnight::BaseKnight()
-{
-    bag = new BaseBag();
-}
 
 static BaseKnight *create(int id, int maxhp, int level, int gil, int antidote, int phoenixdownI)
 {
@@ -260,7 +272,7 @@ static BaseKnight *create(int id, int maxhp, int level, int gil, int antidote, i
     {
         antidote = 5;
     }
-    
+
     BaseKnight *newKnight;
 
     KnightType typ = makeKnightType(maxhp);
@@ -279,7 +291,7 @@ static BaseKnight *create(int id, int maxhp, int level, int gil, int antidote, i
         newKnight = new PaladinKnight();
     }
 
-    else 
+    else
     {
         newKnight = new NormalKnight();
     }
@@ -289,13 +301,14 @@ static BaseKnight *create(int id, int maxhp, int level, int gil, int antidote, i
     newKnight->setMaxhp(maxhp);
     newKnight->setLevel(level);
     newKnight->setGil(gil);
-    newKnight -> setKnightType(typ);
+    newKnight->setKnightType(typ);
+    newKnight->set2();
     newKnight->setBag(phoenixDownI, phoenixdownI);
     if (typ != DRAGON)
     {
-        newKnight->setBag(Antidote, antidote);
+        newKnight->setBag(ANTIDOTE, antidote);
     }
-    newKnight -> getBag() -> knight = newKnight; 
+    newKnight->getBag()->knight = newKnight;
     return newKnight;
 }
 
@@ -310,7 +323,7 @@ string BaseKnight::toString() const
 }
 
 void BaseKnight::setBag(ItemType item, int size)
-{    
+{
     if (size >= 1)
     {
         if (size >= 5)
@@ -340,10 +353,10 @@ void BaseKnight::setBag(ItemType item, int size)
                 bag->insertBag(item);
             }
 
-            else if (item == Antidote)
+            else if (item == ANTIDOTE)
             {
                 bag->insertBag(item);
-            }  
+            }
         }
     }
 }
@@ -352,41 +365,58 @@ void BaseKnight::setBag(ItemType item, int size)
 
 /* * * BEGIN implementation of class ArmyKnights * * */
 
-ArmyKnights::ArmyKnights(const string &file_armyknights)
-{    
-    PaladinShield = false;
-    LancelotSpear = false;
-    GuinevereHair = false;
-    ExcaliburSword = false;
+ArmyKnights::~ArmyKnights()
+{
+    // int len = sizeArmy;
+    // for (int i = 0; i < len; i++)
+    // {
+    //     BaseKnight *lastKnight = this->lastKnight();
+    //     sizeArmy -= 1;
+    //     free(lastKnight);
+    // }
+    // if (sizeArmy > 0)
+    // {
+    //     delete arrArmy;
+    // }
+    // for (int i = 0; i < sizeArmy; i++) 
+    // {
+    //     delete (arrArmy + i);
+    // }
+    delete[] arrArmy;
+}
 
-    ifstream fp;
-    fp.open(file_armyknights);
-    fp >> sizeArmy;
-    arrArmy = new BaseKnight[sizeArmy];
-    int hp, level, phoenixdownI, gil, antidote;
-    for (int i = 0; i < sizeArmy; i++)
+void ArmyKnights::printInfo() const
+{
+    // cout << "No. knights: " << this->count();
+    // if (this->count() > 0)
+    // {
+    //     BaseKnight *lknight = lastKnight(); // last knight
+    //     cout << ";" << lknight->toString();
+    // }
+    // cout << ";PaladinShield:" << this->hasPaladinShield()
+    //      << ";LancelotSpear:" << this->hasLancelotSpear()
+    //      << ";GuinevereHair:" << this->hasGuinevereHair()
+    //      << ";ExcaliburSword:" << this->hasExcaliburSword()
+    //      << endl
+    //      << string(50, '-') << endl;
+    string s = "No. knights: " + to_string(this->count());
+    if (this->count() > 0)
     {
-        fp >> hp >> level >> phoenixdownI >> gil >> antidote;
-        arrArmy[i] = *create(i + 1, hp, level, gil, antidote, phoenixdownI);
+        BaseKnight *lknight = lastKnight();
+        s += ";" + lknight->toString();
     }
-    fp.close();
+    s += ";PaladinShield:" + to_string(this->hasPaladinShield());
+    s += ";LancelotSpear:" + to_string(this->hasLancelotSpear());
+    s += ";GuinevereHair:" + to_string(this->hasGuinevereHair());
+    s += ";ExcaliburSword:" + to_string(this->hasExcaliburSword());
+    s += "\n";
+    s += string(50, '-') + "\n";
+    output += s;
+    cout << s;
 }
 
-void ArmyKnights::printInfo() const {
-    cout << "No. knights: " << this->count();
-    if (this->count() > 0) {
-        BaseKnight * lknight = lastKnight(); // last knight
-        cout << ";" << lknight->toString();
-    }
-    cout << ";PaladinShield:" << this->hasPaladinShield()
-        << ";LancelotSpear:" << this->hasLancelotSpear()
-        << ";GuinevereHair:" << this->hasGuinevereHair()
-        << ";ExcaliburSword:" << this->hasExcaliburSword()
-        << endl
-        << string(50, '-') << endl;
-}
-
-void ArmyKnights::printResult(bool win) const {
+void ArmyKnights::printResult(bool win) const
+{
     cout << (win ? "WIN" : "LOSE") << endl;
 }
 
@@ -395,41 +425,34 @@ int ArmyKnights::count() const
     return sizeArmy;
 }
 
-
-ArmyKnights::~ArmyKnights()
-{
-    delete[] arrArmy;
-}
-
-BaseKnight * ArmyKnights::lastKnight() const 
-{
-    if (sizeArmy == 0)
+BaseKnight *ArmyKnights::lastKnight() const {
+    if (sizeArmy == 0) {
+        return nullptr;  
+    } 
+    
+    else 
     {
-        return nullptr;
+        return &arrArmy[sizeArmy - 1];
     }
-
-    BaseKnight * lastKnight = &arrArmy[(this -> sizeArmy) - 1]; 
-    return lastKnight;
 }
 
-bool ArmyKnights::fight(BaseOpponent * opponent)
+bool ArmyKnights::fight(BaseOpponent *opponent)
 {
     if (sizeArmy == 0)
     {
-        delete[] arrArmy;
         return false;
     }
 
-    BaseKnight * lastKnight = this -> lastKnight();
+    BaseKnight *lastKnight = this->lastKnight();
 
-    int levelOppo = opponent -> levelO;
-    int baseDam = opponent -> baseDamage;
-    int evenNum =  opponent->eventNum;
+    int levelOppo = opponent->levelO;
+    int baseDam = opponent->baseDamage;
+    int evenNum = opponent->eventNum;
 
-    int gil = lastKnight -> getGil();
-    int level = lastKnight -> getLevel();
-    int hp = lastKnight -> getHp();
-    int maxhp = lastKnight -> getMaxhp();
+    int gil = lastKnight->getGil();
+    int level = lastKnight->getLevel();
+    int hp = lastKnight->getHp();
+    int maxhp = lastKnight->getMaxhp();
     int typ = lastKnight->getKnightType();
 
     if (evenNum >= 1 && evenNum <= 5)
@@ -443,42 +466,58 @@ bool ArmyKnights::fight(BaseOpponent * opponent)
             {
                 gil = 999;
             }
-            lastKnight -> setGil(gil);
+            lastKnight->setGil(gil);
             return true;
         }
 
         hp = hp - baseDam * (levelOppo - level);
         // cout << hp << endl;
-        lastKnight -> setHp(hp);
+        lastKnight->setHp(hp);
+        // if (hp <= 0)
+        // {
+        //     // cout << "co di zo day" << endl;
+        //     BaseItem * temp = lastKnight->getBag()->get(FirstPhoenixDown);
+        //     while (temp != nullptr)
+        //     {
+        //         // cout << "tim duoc phoenix\n";
+        //         lastKnight->getBag()->swapBag(temp);
+        //         temp->use(lastKnight);
+        //         int hpnew = lastKnight->getHp();
+        //         // cout << hpnew << endl;
+        //         if (hpnew > 0)
+        //         {
+        //             return true;
+        //         }
+        //         temp = lastKnight->getBag()->get(FirstPhoenixDown);
+        //     }
+
+        //     if (gil >= 100)
+        //     {
+        //         gil -= 100;
+        //         hp = maxhp / 2;
+        //         lastKnight -> setGil(gil);
+        //         lastKnight -> setHp(hp);
+        //         return true;
+        //     }
+
+        //     delete lastKnight;
+        //     sizeArmy -= 1;
+        // }
         if (hp <= 0)
         {
-            while (lastKnight->getBag()->get(FirstPhoenixDown) != nullptr)
+            if (!BleedToDeath())
             {
-                lastKnight->getBag()->swapBag(lastKnight->getBag()->get(FirstPhoenixDown));
-                lastKnight->getBag()->get(FirstPhoenixDown)->use(lastKnight);
-                int hpnew = lastKnight->getHp();
-                if (hpnew > 0)
-                {
-                    return true;
-                }
+                return false;
             }
+        }
 
-            if (gil >= 100)
-            {
-                gil -= 100;
-                hp = maxhp / 2;
-                lastKnight -> setGil(gil);
-                lastKnight -> setHp(hp);
-                return true;
-            }
-
-            delete lastKnight;
-            sizeArmy -= 1;
-            return fight(opponent);
+        else
+        {
+            searchAndUse();
         }
         return true;
     }
-    
+
     else if (evenNum == 6)
     {
         if (level >= levelOppo)
@@ -488,80 +527,76 @@ bool ArmyKnights::fight(BaseOpponent * opponent)
             {
                 level = 10;
             }
-            lastKnight -> setLevel(level);
+            lastKnight->setLevel(level);
             return true;
-        }  
+        }
 
         if (typ == DRAGON)
         {
             return true;
         }
 
-        if (lastKnight->getBag()->get(Antidote) != nullptr)
+        if (lastKnight->getBag()->get(ANTIDOTE) != nullptr)
         {
-            lastKnight->getBag()->swapBag(lastKnight->getBag()->get(Antidote));
-            lastKnight->getBag()->get(Antidote)->use(lastKnight);
+            lastKnight->getBag()->swapBag(lastKnight->getBag()->get(ANTIDOTE));
+            lastKnight->getBag()->deleteBag();
+            lastKnight->getBag()->sizeBag -= 1;
             return true;
         }
 
-        //thua o day ne
-        BaseItem * temp = lastKnight->getBag()->head;
+        // thua o day ne
+        BaseItem *temp = lastKnight->getBag()->head;
         if (lastKnight->getBag()->sizeBag <= 3)
         {
-            lastKnight->getBag()->head = NULL;
             while (temp != NULL)
             {
-                BaseItem * nest = temp -> next;
+                BaseItem *nest = temp->next;
                 delete temp;
                 temp = nest;
             }
             lastKnight->getBag()->sizeBag = 0;
+            lastKnight->getBag()->head = NULL;
         }
 
-        else 
+        else
         {
-            for (int i = 0; i < lastKnight->getBag()->sizeBag - 3; i++) 
+            // for (int i = 0; i < lastKnight->getBag()->sizeBag - 3; i++)
+            // {
+            //     temp = temp->next;
+            // }
+
+            // while (temp != NULL)
+            // {
+            //     BaseItem *nest = temp->next;
+            //     delete temp;
+            //     temp = nest;
+            // }
+            for (int i = 0; i < 3; i++)
             {
-                temp = temp->next;
+                temp = lastKnight->getBag()->head->next;
+                delete lastKnight->getBag()->head;
+                lastKnight->getBag()->head = temp;
             }
 
-            while (temp != NULL)
-            {
-                BaseItem * nest = temp -> next;
-                delete temp;
-                temp = nest;
-            }
             lastKnight->getBag()->sizeBag -= 3;
         }
 
         hp -= 10;
-        lastKnight -> setHp(hp);
+        lastKnight->setHp(hp);
         if (hp <= 0)
         {
-            while (lastKnight->getBag()->get(FirstPhoenixDown) != nullptr)
+            if (!BleedToDeath())
             {
-                lastKnight->getBag()->swapBag(lastKnight->getBag()->get(FirstPhoenixDown));
-                lastKnight->getBag()->get(FirstPhoenixDown)->use(lastKnight);
-                if (hp > 0)
-                {
-                    return true;
-                }
+                return false;
             }
-
-            if (gil >= 100)
-            {
-                gil -= 100;
-                hp = maxhp / 2;
-                return true;
-            }
-
-            delete lastKnight;
-            sizeArmy -= 1;
-            return fight(opponent);
-        } 
+        }
+        else
+        {
+            searchAndUse();
+        }
         return true;
     }
-    
+
     else if (evenNum == 7)
     {
         if (level >= levelOppo)
@@ -571,16 +606,20 @@ bool ArmyKnights::fight(BaseOpponent * opponent)
             {
                 int remain = gil - 999;
                 gil = 999;
-                lastKnight -> setGil(gil);
+                lastKnight->setGil(gil);
 
                 for (int i = 0; i < sizeArmy - 1; i++)
                 {
-                    BaseKnight * beforeKnight = lastKnight - (i + 1);
-                    int thisGil = beforeKnight -> getGil();
+                    if (remain <= 0)
+                    {
+                        break;
+                    }
+                    BaseKnight *beforeKnight = lastKnight - (i + 1);
+                    int thisGil = beforeKnight->getGil();
                     thisGil += remain;
                     if (thisGil <= 999)
                     {
-                        beforeKnight -> setGil(thisGil);
+                        beforeKnight->setGil(thisGil);
                         break;
                     }
 
@@ -588,13 +627,13 @@ bool ArmyKnights::fight(BaseOpponent * opponent)
                     {
                         remain = thisGil - 999;
                         thisGil = 999;
-                        beforeKnight -> setGil(thisGil);
+                        beforeKnight->setGil(thisGil);
                     }
                 }
             }
-            lastKnight -> setGil(gil);
+            lastKnight->setGil(gil);
             return true;
-        } 
+        }
 
         else
         {
@@ -603,10 +642,10 @@ bool ArmyKnights::fight(BaseOpponent * opponent)
                 return true;
             }
             gil /= 2;
-            lastKnight -> setGil(gil);
+            lastKnight->setGil(gil);
             return true;
         }
-    } 
+    }
 
     else if (evenNum == 8)
     {
@@ -629,7 +668,7 @@ bool ArmyKnights::fight(BaseOpponent * opponent)
             return true;
         }
 
-        if (hp < maxhp / 3) 
+        if (hp < maxhp / 3)
         {
             gil -= 50;
             hp += maxhp / 5;
@@ -643,49 +682,40 @@ bool ArmyKnights::fight(BaseOpponent * opponent)
         }
         return true;
     }
-    
+
     else if (evenNum == 9)
     {
-        lastKnight -> setHp(maxhp);
+        lastKnight->setHp(maxhp);
         return true;
     }
-    
+
     else if (evenNum == 10)
     {
         if ((level == 10 && hp == maxhp) || (typ == DRAGON))
         {
             level = 10;
             gil = 999;
-            lastKnight -> setLevel(level);
-            lastKnight -> setGil(gil);
+            lastKnight->setLevel(level);
+            lastKnight->setGil(gil);
             return true;
         }
 
         else
         {
             hp = 0;
-            while (lastKnight->getBag()->get(FirstPhoenixDown) != nullptr)
+            lastKnight->setHp(hp);
+            if (hp <= 0)
             {
-                lastKnight->getBag()->swapBag(lastKnight->getBag()->get(FirstPhoenixDown));
-                lastKnight->getBag()->get(FirstPhoenixDown)->use(lastKnight);
-                if (hp > 0)
+                if (!BleedToDeath())
                 {
-                    return true;
+                    return false;
                 }
             }
-
-            if (gil >= 100)
+            else
             {
-                gil -= 100;
-                hp = maxhp / 2;
-                lastKnight -> setGil(gil);
-                lastKnight -> setHp(hp);
-                return true;
+                searchAndUse();
             }
-
-            delete lastKnight;
-            sizeArmy -= 1;
-            return fight(opponent);
+            return false;
         }
     }
 
@@ -697,31 +727,22 @@ bool ArmyKnights::fight(BaseOpponent * opponent)
             return true;
         }
 
-        else 
+        else
         {
             hp = 0;
-            if (lastKnight->getBag()->get(FirstPhoenixDown) != nullptr)
+            lastKnight->setHp(hp);
+            if (hp <= 0)
             {
-                lastKnight->getBag()->swapBag(lastKnight->getBag()->get(FirstPhoenixDown));
-                lastKnight->getBag()->get(FirstPhoenixDown)->use(lastKnight);
-                if (hp > 0)
+                if (!BleedToDeath())
                 {
-                    return true;
+                    return false;
                 }
             }
-
-            if (gil >= 100)
+            else
             {
-                gil -= 100;
-                hp = maxhp / 2;
-                lastKnight -> setGil(gil);
-                lastKnight -> setHp(hp);
-                return true;
+                searchAndUse();
             }
-
-            delete lastKnight;
-            sizeArmy -= 1;
-            return fight(opponent);
+            return false;
         }
     }
 
@@ -733,75 +754,285 @@ bool ArmyKnights::fight(BaseOpponent * opponent)
             return true;
         }
 
+        // else if (hasPaladinShield() && hasLancelotSpear() && hasGuinevereHair())
+        // {
+        //     int dam = 0;
+        //     if (typ != NORMAL)
+        //     {
+        //         dam += hp * level * lastKnight->knightBaseDamage;
+        //         if (dam < 5000)
+        //         {
+        //             delete lastKnight;
+        //             sizeArmy -= 1;
+        //         }
+        //     }
+
+        //     int len = sizeArmy - 1;
+        //     for (int i = 0; i < len; i++)
+        //     {
+        //         BaseKnight *beforeKnight = lastKnight - (i + 1);
+        //         if (beforeKnight->getKnightType() != NORMAL)
+        //         {
+        //             dam += beforeKnight->getHp() * beforeKnight->getLevel() * beforeKnight->knightBaseDamage;
+        //             if (dam < 5000)
+        //             {
+        //                 delete beforeKnight;
+        //                 sizeArmy -= 1;
+        //             }
+        //             else
+        //             {
+        //                 return true;
+        //             }
+        //         }
+        //     }
+        //     // delete[] arrArmy;
+        //     sizeArmy = 0;
+        //     return false;
+        // }
+
         else if (hasPaladinShield() && hasLancelotSpear() && hasGuinevereHair())
         {
             int dam = 0;
-            if (typ != NORMAL)
-            {
-                dam += hp * level * lastKnight -> knightBaseDamage;
-                if (dam < 5000)
-                {                         
-                    delete lastKnight;
-                    sizeArmy -= 1;
-                }
-            }
-            
             int len = sizeArmy - 1;
-            for (int i = 0; i < len; i++) 
-            {                    
-                BaseKnight * beforeKnight = lastKnight - (i + 1);
-                if (beforeKnight->getKnightType() != NORMAL)
+            
+            for (int i = len; i >= 0; i--)
+            {         
+                //  cout << i << " ";
+
+                BaseKnight * beforeKnight = &arrArmy[i];  
+                // cout << "HP = " << beforeKnight->getHp()<< " ";    
+                KnightType newtyp = beforeKnight->getKnightType();
+                if (newtyp == NORMAL)
                 {
-                    dam += beforeKnight -> getHp() * beforeKnight -> getLevel() * beforeKnight -> knightBaseDamage;
-                    if (dam < 5000)
-                    {
-                        delete beforeKnight;
-                        sizeArmy -= 1;
-                    }
-                    else 
-                    {
-                        return true;
-                    }
+                    // cout << "SKIP" << endl;
+                    continue;
                 }
+                dam += beforeKnight->getHp() * beforeKnight->getLevel() * beforeKnight->knightBaseDamage;
+                // cout << dam << endl;
+
+                if (dam < 5000)
+                {
+                    BaseKnight * newArrArmy = new BaseKnight[sizeArmy - 1];
+
+                    for (int j = 0; j < sizeArmy - 1; j++)
+                    {
+                        if (j < i)
+                        {
+                            newArrArmy[j] = arrArmy[j];
+                        }
+
+                        else 
+                        {
+                            newArrArmy[j] = arrArmy[j + 1];
+                        }
+                    }
+                    delete[] arrArmy;
+                    sizeArmy -= 1;
+                    arrArmy = newArrArmy;
+                }
+                else 
+                {
+                    // for (int i = 0; i < sizeArmy; i++)
+                    // {
+                    //     cout << (arrArmy + i) -> toString() << endl;;
+                    // }
+                    return true;
+                }
+                
             }
-            // delete[] arrArmy;
             sizeArmy = 0;
             return false;
         }
 
+
         else
         {
-            // delete[] arrArmy;
             sizeArmy = 0;
             return false;
         }
     }
 
-    cout << "no chay di dau ne" << endl;
     return false;
+}
+
+bool ArmyKnights::adventure(Events *events)
+{
+    bool Omega = false, HadesBool = false;
+    int len = events->count();
+    for (int i = 0; i < len; i++)
+    {
+        int thisEvent = events->arrEvents[i];
+
+        if (thisEvent >= 1 && thisEvent <= 5)
+        {
+            int levelO = (i + thisEvent) % 10 + 1;
+
+            if (thisEvent == 1)
+            {
+                MadBear *opponent = new MadBear(levelO);
+                fight(opponent);
+                delete opponent;
+            }
+            else if (thisEvent == 2)
+            {
+                Bandit *opponent = new Bandit(levelO);
+                fight(opponent);
+                delete opponent;
+            }
+            else if (thisEvent == 3)
+            {
+                LordLupin *opponent = new LordLupin(levelO);
+                fight(opponent);
+                delete opponent;
+            }
+            else if (thisEvent == 4)
+            {
+                Elf *opponent = new Elf(levelO);
+                fight(opponent);
+                delete opponent;
+            }
+            else if (thisEvent == 5)
+            {
+                Troll *opponent = new Troll(levelO);
+                fight(opponent);
+                delete opponent;
+            }
+        }
+
+        else if (thisEvent == 6)
+        {
+            int levelO = (i + thisEvent) % 10 + 1;
+            Tornbery *opponent = new Tornbery(levelO);
+            fight(opponent);
+            delete opponent;
+        }
+
+        else if (thisEvent == 7)
+        {
+            int levelO = (i + thisEvent) % 10 + 1;
+            QueenOfCards *opponent = new QueenOfCards(levelO);
+            fight(opponent);
+            delete opponent;
+        }
+
+        else if (thisEvent == 8)
+        {
+            NinaDeRings *opponent = new NinaDeRings();
+            fight(opponent);
+            delete opponent;
+        }
+
+        else if (thisEvent == 9)
+        {
+            DurianGarden *opponent = new DurianGarden();
+            fight(opponent);
+            delete opponent;
+        }
+
+        else if (thisEvent == 10)
+        {
+            if (Omega == false)
+            {
+                OmegaWeapon *opponent = new OmegaWeapon();
+                if (fight(opponent))
+                {
+                    Omega = true; 
+                }
+                delete opponent;
+            }
+        }
+
+        else if (thisEvent == 11)
+        {
+            if (HadesBool == false)
+            {
+                Hades *opponent = new Hades();
+                if (fight(opponent))
+                {
+                    HadesBool = true;
+                }
+                delete opponent;
+            }
+        }
+
+        else if (thisEvent == 95)
+        {
+            PaladinShield = true;
+        }
+
+        else if (thisEvent == 96)
+        {
+            LancelotSpear = true;
+        }
+
+        else if (thisEvent == 97)
+        {
+            GuinevereHair = true;
+        }
+
+        else if (thisEvent == 98)
+        {
+            if (hasPaladinShield() && hasLancelotSpear() && hasGuinevereHair())
+            {
+                ExcaliburSword = true;
+            }
+        }
+
+        else if (thisEvent == 99)
+        {
+            Ultimecia *opponent = new Ultimecia();
+            fight(opponent);
+            delete opponent;
+        }
+
+        else if (thisEvent == 112)
+        {
+            PhoenixDownII *object = new PhoenixDownII();
+            BaseKnight *lastKnight = this->lastKnight();
+            lastKnight->getBag()->insertFirst(object);
+        }
+
+        else if (thisEvent == 113)
+        {
+            PhoenixDownIII *object = new PhoenixDownIII();
+            BaseKnight *lastKnight = this->lastKnight();
+            lastKnight->getBag()->insertFirst(object);
+        }
+
+        else if (thisEvent == 114)
+        {
+            PhoenixDownIV *object = new PhoenixDownIV();
+            BaseKnight *lastKnight = this->lastKnight();
+            lastKnight->getBag()->insertFirst(object);
+        }
+
+        printInfo();
+
+        if (sizeArmy <= 0)
+        {
+            return false;
+        }
+    }
+    return true;
 }
 
 /* * * END implementation of class ArmyKnights * * */
 
 /* * * BEGIN implementation of class Events * * */
-Events::Events(const string &file_events)
-{
-    ifstream fp;
-    fp.open(file_events);
-    fp >> sizeEvents;
-    arrEvents = new int[sizeEvents];
-    int event;
-    for (int i = 0; i < sizeEvents; i++)
-    {
-        fp >> event;
-        arrEvents[i] = event;
-    }
-    fp.close();
-}
 
 Events::~Events()
 {
     delete[] arrEvents;
+}
+
+int Events::count() const
+{
+    return sizeEvents;
+}
+
+int Events::get(int i) const
+{
+    return arrEvents[i];
 }
 
 /* * * END implementation of class Events * * */
@@ -831,147 +1062,84 @@ void KnightAdventure::loadEvents(const string &file_events)
 
 void KnightAdventure::run()
 {
-    bool Omega = false, HadesBool = false;
-    int len = events->sizeEvents;
-    for (int i = 0; i < len; i++)
-    {
-        int thisEvent = events->arrEvents[i];
-
-        if (thisEvent >= 1 && thisEvent <= 5)
-        {
-            int levelO = (i + thisEvent) % 10 + 1;
-
-            if (thisEvent == 1)
-            {
-                MadBear * opponent = new MadBear(levelO);
-                armyKnights->fight(opponent);
-            }
-            if (thisEvent == 2)
-            {
-                Bandit * opponent = new Bandit(levelO);
-                armyKnights->fight(opponent);
-            }
-            if (thisEvent == 3)
-            {
-                LordLupin * opponent = new LordLupin(levelO);
-                armyKnights->fight(opponent);
-            }
-            if (thisEvent == 4)
-            {
-                Elf * opponent = new Elf(levelO);
-                armyKnights->fight(opponent);
-            }
-            if (thisEvent == 5)
-            {
-                Troll * opponent = new Troll(levelO);
-                armyKnights->fight(opponent);
-            }
-        }
-
-        else if (thisEvent == 6)
-        {
-            int levelO = (i + thisEvent) % 10 + 1;
-            Tornbery * opponent = new Tornbery(levelO);
-            armyKnights->fight(opponent);
-        }
-
-        else if (thisEvent == 7)
-        {
-            int levelO = (i + thisEvent) % 10 + 1;
-            QueenOfCards * opponent = new QueenOfCards(levelO);
-            armyKnights->fight(opponent);
-        }
-
-        else if (thisEvent == 8)
-        {
-            NinaDeRings * opponent = new NinaDeRings();
-            armyKnights->fight(opponent);
-        }
-
-        else if (thisEvent == 9)
-        {
-            DurianGarden * opponent = new DurianGarden();
-            armyKnights->fight(opponent);        
-        }
-
-        else if (thisEvent == 10)
-        {
-            if (Omega == false)
-            {
-                Omega = true;
-                OmegaWeapon * opponent = new OmegaWeapon();
-                armyKnights->fight(opponent);  
-            }
-        }
-
-        else if (thisEvent == 11)
-        {
-            if (HadesBool == false)
-            {
-                Hades * opponent = new Hades();
-                if (armyKnights->fight(opponent))
-                {
-                    HadesBool = true;
-                }
-            }
-        }
-
-        else if (thisEvent == 95)
-        {
-            armyKnights->PaladinShield = true;
-        }
-        
-        else if (thisEvent == 96)
-        {
-            armyKnights->LancelotSpear = true;
-        }
-        
-        else if (thisEvent == 97)
-        {
-            armyKnights->GuinevereHair = true;
-        }
-
-        else if (thisEvent == 98)
-        {
-            if (armyKnights->hasPaladinShield() && armyKnights->hasLancelotSpear() && armyKnights->hasGuinevereHair())
-            {
-                armyKnights->ExcaliburSword = true;
-            }
-        }
-
-        else if (thisEvent == 99)
-        {
-            Ultimecia * opponent = new Ultimecia();
-            armyKnights->fight(opponent);
-        }
-
-        else if (thisEvent == 112)
-        {
-            classPhoenixII *object = new classPhoenixII();
-            armyKnights->lastKnight()->getBag()->insertFirst(object);
-        }
-
-        else if (thisEvent == 113)
-        {
-            classPhoenixIII *object = new classPhoenixIII();
-            armyKnights->lastKnight()->getBag()->insertFirst(object);
-        }
-
-        else if (thisEvent == 114)
-        {
-            classPhoenixIV *object = new classPhoenixIV();
-            armyKnights->lastKnight()->getBag()->insertFirst(object);
-        }
-        
-        armyKnights->printInfo();
-    }
-
     bool win = true;
-    if (armyKnights->sizeArmy <= 0)
+    if (!armyKnights->adventure(events))
     {
         win = false;
     }
-    armyKnights-> printResult(win);
+    armyKnights->printResult(win);
+
+    // if (win == true)
+    // {
+    //     output += "WIN";
+    // }
+
+    // else
+    // {
+    //     output += "LOSE";
+    // }
+
+    // ofstream outfile("output.txt");
+    // if (outfile.is_open())
+    // {
+    //     outfile << output;
+    //     outfile.close();
+    // }
+    // else
+    // {
+    //     std::cout << "Failed to open file." << std::endl;
+    // }
 }
 
 /* * * END implementation of class KnightAdventure * * */
+
+Events::Events(const string &file_events)
+{
+    ifstream fp;
+    fp.open(file_events);
+    fp >> sizeEvents;
+    arrEvents = new int[sizeEvents];
+    int event;
+    for (int i = 0; i < sizeEvents; i++)
+    {
+        fp >> event;
+        arrEvents[i] = event;
+    }
+    fp.close();
+
+    // sizeEvents = 6;
+    // arrEvents = new int[sizeEvents];
+    // arrEvents[0] = 95;
+    // arrEvents[1] = 95;
+    // arrEvents[2] = 96;
+    // arrEvents[3] = 97;
+    // arrEvents[4] = 98;
+    // arrEvents[5] = 99;
+}
+
+ArmyKnights::ArmyKnights(const string &file_armyknights)
+{
+
+    PaladinShield = false;
+    LancelotSpear = false;
+    GuinevereHair = false;
+    ExcaliburSword = false;
+
+    ifstream fp;
+    fp.open(file_armyknights);
+    fp >> sizeArmy;
+    arrArmy = new BaseKnight [sizeArmy];
+    int hp, level, phoenixdownI, gil, antidote;
+    for (int i = 0; i < sizeArmy; i++)
+    {
+        fp >> hp >> level >> phoenixdownI >> gil >> antidote;
+        BaseKnight * temp = create(i + 1, hp, level, gil, antidote, phoenixdownI);
+        arrArmy[i] = *temp;
+        delete temp;
+    }
+    fp.close();
+
+    // sizeArmy = 1;
+    // arrArmy = new BaseKnight[sizeArmy];
+    // arrArmy[0] = *create(1, 601, 7, 99, 0, 0);
+}
