@@ -27,16 +27,16 @@ public:
     BaseKnight *knight;
     BaseItem *head;
     int sizeBag;
-    BaseBag(BaseKnight * otherKnight);
+    BaseBag();
     ~BaseBag();
 
     void insertBag(ItemType item);
     void swapBag(BaseItem *item);
     void deleteBag();
 
-    virtual bool insertFirst(BaseItem *item);
+    virtual bool insertFirst(BaseItem *item); 
     virtual BaseItem *get(ItemType itemType);
-    virtual string toString() const; // have to
+    virtual string toString() const; //have to
 };
 
 enum KnightType
@@ -61,19 +61,18 @@ protected:
     KnightType knightType;
 
 public:
-    BaseKnight()
-    {
-        bag = nullptr;
-    }
-    ~BaseKnight()
-    {
-        delete bag;
-        // bag = nullptr;
-    }
-
     float knightBaseDamage;
     int maxSize;
     bool dead = false;
+
+    // BaseKnight()
+    // {
+    //     bag = new BaseBag();
+    // }
+    ~BaseKnight()
+    {
+        delete bag;
+    }
 
     void print();
     void printlist();
@@ -94,80 +93,64 @@ public:
     void setGil(int gil1) { gil = gil1; }
 
     KnightType getKnightType() { return knightType; }
-    void setKnightType(KnightType typ) { knightType = typ; }
+    void setKnightType(KnightType typ) {knightType = typ;}
 
     void setBag(ItemType item, int size);
+    void set2(){bag = new BaseBag();}
     BaseBag *getBag() { return bag; }
-    void set2(BaseKnight * otherKnight)
-    {
-        bag = new BaseBag(otherKnight);
-    }
 
     static BaseKnight *create(int id, int maxhp, int level, int gil, int antidote, int phoenixdownI);
     string toString() const;
+
+    // void linkKnight(const BaseKnight & other)
+    // {
+    //     id = other.id;
+    //     hp = other.hp;
+    //     maxhp = other.maxhp;
+    //     level = other.level;
+    //     gil = other.gil;
+    //     knightType = other.knightType;
+    //     bag = other.bag;
+    // }
 };
 
-class PaladinKnight : public BaseKnight
+class PaladinKnight: public BaseKnight
 {
-public:
+    public:
     PaladinKnight()
     {
-        // bag = new BaseBag();
         maxSize = -1;
         knightBaseDamage = 0.06;
     }
-    ~PaladinKnight()
-    {
-        // delete bag;
-        // bag = nullptr;
-    }
 };
 
-class LancelotKnight : public BaseKnight
+class LancelotKnight: public BaseKnight
 {
-public:
+    public:
     LancelotKnight()
     {
-        // bag = new BaseBag();
         maxSize = maxLancelotBag;
         knightBaseDamage = 0.05;
     }
-    ~LancelotKnight()
-    {
-        // delete bag;
-        // bag = nullptr;
-    }
 };
 
-class DragonKnight : public BaseKnight
+class DragonKnight: public BaseKnight
 {
-public:
+    public:
     DragonKnight()
     {
-        // bag = new BaseBag();
         maxSize = maxDragonBag;
         knightBaseDamage = 0.075;
     }
-    ~DragonKnight()
-    {
-        // delete bag;
-        // bag = nullptr;
-    }
 };
 
-class NormalKnight : public BaseKnight
+class NormalKnight: public BaseKnight
 {
-public:
+    public:
     NormalKnight()
     {
-        // bag = new BaseBag();
         maxSize = maxNormalBag;
         knightBaseDamage = 0;
-    }
-    ~NormalKnight()
-    {
-        // delete bag;
-        // bag = nullptr;
     }
 };
 
@@ -180,11 +163,11 @@ public:
     int levelO;
 };
 
-class MadBear : public BaseOpponent
-{
+class MadBear: public BaseOpponent
+{   
 public:
     MadBear(int levelIn)
-    {
+    {   
         eventNum = 1;
         baseDamage = 10;
         gilIfWin = 100;
@@ -192,7 +175,7 @@ public:
     }
 };
 
-class Bandit : public BaseOpponent
+class Bandit: public BaseOpponent
 {
 public:
     Bandit(int levelIn)
@@ -204,7 +187,7 @@ public:
     }
 };
 
-class LordLupin : public BaseOpponent
+class LordLupin: public BaseOpponent
 {
 public:
     LordLupin(int levelIn)
@@ -216,7 +199,7 @@ public:
     }
 };
 
-class Elf : public BaseOpponent
+class Elf: public BaseOpponent
 {
 public:
     Elf(int levelIn)
@@ -228,7 +211,7 @@ public:
     }
 };
 
-class Troll : public BaseOpponent
+class Troll: public BaseOpponent
 {
 public:
     Troll(int levelIn)
@@ -240,7 +223,7 @@ public:
     }
 };
 
-class Tornbery : public BaseOpponent
+class Tornbery: public BaseOpponent
 {
 public:
     Tornbery(int levelIn)
@@ -250,7 +233,7 @@ public:
     }
 };
 
-class QueenOfCards : public BaseOpponent
+class QueenOfCards: public BaseOpponent
 {
 public:
     QueenOfCards(int levelIn)
@@ -260,7 +243,7 @@ public:
     }
 };
 
-class NinaDeRings : public BaseOpponent
+class NinaDeRings:public BaseOpponent
 {
 public:
     NinaDeRings()
@@ -269,7 +252,7 @@ public:
     }
 };
 
-class DurianGarden : public BaseOpponent
+class DurianGarden:public BaseOpponent
 {
 public:
     DurianGarden()
@@ -278,7 +261,7 @@ public:
     }
 };
 
-class OmegaWeapon : public BaseOpponent
+class OmegaWeapon:public BaseOpponent
 {
 public:
     OmegaWeapon()
@@ -287,7 +270,7 @@ public:
     }
 };
 
-class Hades : public BaseOpponent
+class Hades:public BaseOpponent
 {
 public:
     Hades()
@@ -296,7 +279,7 @@ public:
     }
 };
 
-class Ultimecia : public BaseOpponent
+class Ultimecia: public BaseOpponent
 {
 public:
     Ultimecia()
@@ -414,6 +397,7 @@ public:
         knight->setHp(hp);
         knight->getBag()->deleteBag();
         knight->getBag()->sizeBag -= 1;
+
     }
 };
 
@@ -423,7 +407,7 @@ public:
     PhoenixDownIV()
     {
         itemType = phoenixDownIV;
-        next = nullptr;
+        next = nullptr; 
     }
     bool canUse(BaseKnight *knight)
     {
@@ -455,7 +439,7 @@ public:
 
 class Antidote : public BaseItem
 {
-public:
+public:    
     Antidote()
     {
         itemType = ANTIDOTE;
@@ -491,7 +475,7 @@ public:
     bool LancelotSpear;
     bool GuinevereHair;
     bool ExcaliburSword;
-    BaseKnight **arrArmy;
+    BaseKnight *arrArmy;
     int sizeInitial;
     int sizeArmy;
 
@@ -499,7 +483,7 @@ public:
     ~ArmyKnights();
     bool hasPaladinShield() const
     {
-        if (PaladinShield)
+        if (PaladinShield) 
         {
             return true;
         }
@@ -507,27 +491,27 @@ public:
     }
     bool hasLancelotSpear() const
     {
-        if (LancelotSpear)
+        if (LancelotSpear) 
         {
             return true;
         }
-        return false;
+        return false; 
     }
     bool hasGuinevereHair() const
     {
-        if (GuinevereHair)
+        if (GuinevereHair) 
         {
             return true;
         }
-        return false;
+        return false; 
     }
     bool hasExcaliburSword() const
     {
-        if (ExcaliburSword)
+        if (ExcaliburSword) 
         {
             return true;
         }
-        return false;
+        return false; 
     }
     bool fight(BaseOpponent *opponent);
     bool adventure(Events *events);
@@ -537,12 +521,12 @@ public:
     void printResult(bool win) const;
     bool BleedToDeath()
     {
-        BaseKnight *lastKnight = this->lastKnight();
-        int hp = lastKnight->getHp();
-        int gil = lastKnight->getGil();
-        int maxhp = lastKnight->getMaxhp();
-
-        BaseItem *temp = lastKnight->getBag()->get(FirstPhoenixDown);
+        BaseKnight * lastKnight = this -> lastKnight();
+        int hp = lastKnight -> getHp();
+        int gil = lastKnight -> getGil();
+        int maxhp = lastKnight -> getMaxhp();
+        
+        BaseItem * temp = lastKnight->getBag()->get(FirstPhoenixDown);
         while (temp != nullptr)
         {
             lastKnight->getBag()->swapBag(temp);
@@ -559,32 +543,31 @@ public:
         {
             gil -= 100;
             hp = maxhp / 2;
-            lastKnight->setGil(gil);
-            lastKnight->setHp(hp);
+            lastKnight -> setGil(gil);
+            lastKnight -> setHp(hp);
             return true;
         }
 
         // delete &arrArmy[sizeArmy - 1];
-        lastKnight->dead = true;
-        sizeArmy -= 1;
+        sizeArmy -= 1;        
         return false;
     }
     void searchAndUse()
     {
-        BaseKnight *lastKnight = this->lastKnight();
-        BaseItem *temp = lastKnight->getBag()->head;
-        for (int i = 0; i < lastKnight->getBag()->sizeBag; i++)
+        BaseKnight * lastKnight = this -> lastKnight();
+        BaseItem * temp = lastKnight-> getBag() -> head;
+        for (int i = 0; i < lastKnight-> getBag() -> sizeBag; i++)
         {
-            if (temp->itemType == phoenixDownI || temp->itemType == phoenixDownII || temp->itemType == phoenixDownIII || temp->itemType == phoenixDownIV)
+            if (temp ->itemType == phoenixDownI || temp ->itemType == phoenixDownII || temp ->itemType == phoenixDownIII || temp ->itemType == phoenixDownIV)
             {
-                if (temp->canUse(lastKnight))
+                if (temp -> canUse(lastKnight))
                 {
                     lastKnight->getBag()->swapBag(temp);
                     temp->use(lastKnight);
                     return;
                 }
             }
-            temp = temp->next;
+            temp = temp -> next;
         }
     }
 };
@@ -604,4 +587,4 @@ public:
     void run();
 };
 
-#endif // __KNIGHT2_H__ 
+#endif // __KNIGHT2_H__

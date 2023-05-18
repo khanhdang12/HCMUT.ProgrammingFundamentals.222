@@ -54,11 +54,10 @@ KnightType makeKnightType(int hpget)
 
 /* * * BEGIN implementation of class BaseBag * * */
 
-BaseBag::BaseBag(BaseKnight * otherKnight)
+BaseBag::BaseBag()
 {
     sizeBag = 0;
     head = nullptr;
-    knight = otherKnight;
 }
 
 BaseBag::~BaseBag()
@@ -73,7 +72,7 @@ BaseBag::~BaseBag()
             delete temp;
         }
     }
-    // delete head;
+
 }
 
 bool BaseBag::insertFirst(BaseItem *item)
@@ -81,7 +80,7 @@ bool BaseBag::insertFirst(BaseItem *item)
     int max = knight->maxSize;
     if (max == -1 || sizeBag < max)
     {
-        if (max == maxDragonBag && item->itemType == ANTIDOTE)
+        if (max == maxDragonBag && item->itemType == Antidote)
         {
             if (knight->getId() > 0)
             {
@@ -136,7 +135,7 @@ string BaseBag::toString() const
         {
             s += "PhoenixIV";
         }
-        else if (arr[i] == ANTIDOTE)
+        else if (arr[i] == Antidote)
         {
             s += "Antidote";
         }
@@ -153,35 +152,35 @@ void BaseBag::insertBag(ItemType item)
 {
     if (item == phoenixDownI)
     {
-        PhoenixDownI *object = new PhoenixDownI();
+        classPhoenixI *object = new classPhoenixI();
         object->next = head;
         head = object;
         sizeBag += 1;
     }
     else if (item == phoenixDownII)
     {
-        PhoenixDownII *object = new PhoenixDownII();
+        classPhoenixII *object = new classPhoenixII();
         object->next = head;
         head = object;
         sizeBag += 1;
     }
     else if (item == phoenixDownIII)
     {
-        PhoenixDownII *object = new PhoenixDownII();
+        classPhoenixIII *object = new classPhoenixIII();
         object->next = head;
         head = object;
         sizeBag += 1;
     }
     else if (item == phoenixDownIV)
     {
-        PhoenixDownIV *object = new PhoenixDownIV();
+        classPhoenixIV *object = new classPhoenixIV();
         object->next = head;
         head = object;
         sizeBag += 1;
     }
     else
     {
-        Antidote *object = new Antidote();
+        classAntidote *object = new classAntidote();
         object->next = head;
         head = object;
         sizeBag += 1;
@@ -247,6 +246,11 @@ void BaseBag::deleteBag()
 
 /* * * BEGIN implementation of class BaseKnight * * */
 
+BaseKnight::BaseKnight()
+{
+    bag = new BaseBag();
+}
+
 static BaseKnight *create(int id, int maxhp, int level, int gil, int antidote, int phoenixdownI)
 {
     if (maxhp > 999)
@@ -296,7 +300,7 @@ static BaseKnight *create(int id, int maxhp, int level, int gil, int antidote, i
     {
         newKnight = new NormalKnight();
     }
-    newKnight->set2(newKnight);
+
     newKnight->setId(id);
     newKnight->setHp(maxhp);
     newKnight->setMaxhp(maxhp);
@@ -306,7 +310,7 @@ static BaseKnight *create(int id, int maxhp, int level, int gil, int antidote, i
     newKnight->setBag(phoenixDownI, phoenixdownI);
     if (typ != DRAGON)
     {
-        newKnight->setBag(ANTIDOTE, antidote);
+        newKnight->setBag(Antidote, antidote);
     }
     newKnight->getBag()->knight = newKnight;
     return newKnight;
@@ -353,7 +357,7 @@ void BaseKnight::setBag(ItemType item, int size)
                 bag->insertBag(item);
             }
 
-            else if (item == ANTIDOTE)
+            else if (item == Antidote)
             {
                 bag->insertBag(item);
             }
@@ -374,12 +378,10 @@ ArmyKnights::~ArmyKnights()
     //     sizeArmy -= 1;
     //     free(lastKnight);
     // }
-
-    for (int i = 0; i < sizeInitial; i++)
+    if (sizeArmy > 0)
     {
-        delete arrArmy[i];
+        delete[] arrArmy;
     }
-    delete[] arrArmy;
 }
 
 void ArmyKnights::printInfo() const
@@ -422,28 +424,14 @@ int ArmyKnights::count() const
     return sizeArmy;
 }
 
-BaseKnight *ArmyKnights::lastKnight() const
-{
-    if (sizeArmy == 0)
+BaseKnight *ArmyKnights::lastKnight() const {
+    if (sizeArmy == 0) {
+        return nullptr;  
+    } 
+    
+    else 
     {
-        return nullptr;
-    }
-
-    // else
-    // {
-    //     return &arrArmy[sizeArmy - 1];
-    // }
-
-    else
-    {
-        for (int i = sizeInitial - 1; i >= 0; i--)
-        {
-            if (arrArmy[i]->dead == false)
-            {
-                return arrArmy[i];
-            }
-        }
-        return nullptr;
+        return &arrArmy[sizeArmy - 1];
     }
 }
 
@@ -547,9 +535,9 @@ bool ArmyKnights::fight(BaseOpponent *opponent)
             return true;
         }
 
-        if (lastKnight->getBag()->get(ANTIDOTE) != nullptr)
+        if (lastKnight->getBag()->get(Antidote) != nullptr)
         {
-            lastKnight->getBag()->swapBag(lastKnight->getBag()->get(ANTIDOTE));
+            lastKnight->getBag()->swapBag(lastKnight->getBag()->get(Antidote));
             lastKnight->getBag()->deleteBag();
             lastKnight->getBag()->sizeBag -= 1;
             return true;
@@ -773,8 +761,7 @@ bool ArmyKnights::fight(BaseOpponent *opponent)
                 dam += hp * level * lastKnight->knightBaseDamage;
                 if (dam < 5000)
                 {
-                    // delete lastKnight;
-                    lastKnight->dead = true;
+                    delete lastKnight;
                     sizeArmy -= 1;
                 }
             }
@@ -788,8 +775,7 @@ bool ArmyKnights::fight(BaseOpponent *opponent)
                     dam += beforeKnight->getHp() * beforeKnight->getLevel() * beforeKnight->knightBaseDamage;
                     if (dam < 5000)
                     {
-                        // delete beforeKnight;
-                        beforeKnight->dead = true;
+                        delete beforeKnight;
                         sizeArmy -= 1;
                     }
                     else
@@ -805,10 +791,6 @@ bool ArmyKnights::fight(BaseOpponent *opponent)
 
         else
         {
-            for (int i = 0; i < sizeInitial; i++)
-            {
-                arrArmy[i] -> dead = true;
-            }
             // delete[] arrArmy;
             sizeArmy = 0;
             return false;
@@ -899,7 +881,7 @@ bool ArmyKnights::adventure(Events *events)
                 OmegaWeapon *opponent = new OmegaWeapon();
                 if (fight(opponent))
                 {
-                    Omega = true;
+                    Omega = true; 
                 }
                 delete opponent;
             }
@@ -950,21 +932,21 @@ bool ArmyKnights::adventure(Events *events)
 
         else if (thisEvent == 112)
         {
-            PhoenixDownII *object = new PhoenixDownII();
+            classPhoenixII *object = new classPhoenixII();
             BaseKnight *lastKnight = this->lastKnight();
             lastKnight->getBag()->insertFirst(object);
         }
 
         else if (thisEvent == 113)
         {
-            PhoenixDownIII *object = new PhoenixDownIII();
+            classPhoenixIII *object = new classPhoenixIII();
             BaseKnight *lastKnight = this->lastKnight();
             lastKnight->getBag()->insertFirst(object);
         }
 
         else if (thisEvent == 114)
         {
-            PhoenixDownIV *object = new PhoenixDownIV();
+            classPhoenixIV *object = new classPhoenixIV();
             BaseKnight *lastKnight = this->lastKnight();
             lastKnight->getBag()->insertFirst(object);
         }
@@ -1091,13 +1073,12 @@ ArmyKnights::ArmyKnights(const string &file_armyknights)
     ifstream fp;
     fp.open(file_armyknights);
     fp >> sizeArmy;
-    sizeInitial = sizeArmy;
-    arrArmy = new BaseKnight*[sizeArmy];
+    arrArmy = new BaseKnight[sizeArmy];
     int hp, level, phoenixdownI, gil, antidote;
     for (int i = 0; i < sizeArmy; i++)
     {
         fp >> hp >> level >> phoenixdownI >> gil >> antidote;
-        arrArmy[i] = create(i + 1, hp, level, gil, antidote, phoenixdownI);
+        arrArmy[i] = *create(i + 1, hp, level, gil, antidote, phoenixdownI);
     }
     fp.close();
 

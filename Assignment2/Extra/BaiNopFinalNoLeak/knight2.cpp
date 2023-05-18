@@ -54,11 +54,11 @@ KnightType makeKnightType(int hpget)
 
 /* * * BEGIN implementation of class BaseBag * * */
 
-BaseBag::BaseBag(BaseKnight * otherKnight)
+BaseBag::BaseBag()
 {
     sizeBag = 0;
     head = nullptr;
-    knight = otherKnight;
+    knight = nullptr;
 }
 
 BaseBag::~BaseBag()
@@ -296,7 +296,7 @@ static BaseKnight *create(int id, int maxhp, int level, int gil, int antidote, i
     {
         newKnight = new NormalKnight();
     }
-    newKnight->set2(newKnight);
+    newKnight->set2();
     newKnight->setId(id);
     newKnight->setHp(maxhp);
     newKnight->setMaxhp(maxhp);

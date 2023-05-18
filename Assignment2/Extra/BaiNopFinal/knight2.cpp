@@ -54,11 +54,11 @@ KnightType makeKnightType(int hpget)
 
 /* * * BEGIN implementation of class BaseBag * * */
 
-BaseBag::BaseBag(BaseKnight * otherKnight)
+BaseBag::BaseBag()
 {
     sizeBag = 0;
     head = nullptr;
-    knight = otherKnight;
+    knight = nullptr;
 }
 
 BaseBag::~BaseBag()
@@ -296,7 +296,7 @@ static BaseKnight *create(int id, int maxhp, int level, int gil, int antidote, i
     {
         newKnight = new NormalKnight();
     }
-    newKnight->set2(newKnight);
+    newKnight->set2();
     newKnight->setId(id);
     newKnight->setHp(maxhp);
     newKnight->setMaxhp(maxhp);
@@ -375,10 +375,6 @@ ArmyKnights::~ArmyKnights()
     //     free(lastKnight);
     // }
 
-    for (int i = 0; i < sizeInitial; i++)
-    {
-        delete arrArmy[i];
-    }
     delete[] arrArmy;
 }
 
@@ -438,9 +434,9 @@ BaseKnight *ArmyKnights::lastKnight() const
     {
         for (int i = sizeInitial - 1; i >= 0; i--)
         {
-            if (arrArmy[i]->dead == false)
+            if ((arrArmy + i)->dead == false)
             {
-                return arrArmy[i];
+                return arrArmy + i;
             }
         }
         return nullptr;
@@ -807,7 +803,7 @@ bool ArmyKnights::fight(BaseOpponent *opponent)
         {
             for (int i = 0; i < sizeInitial; i++)
             {
-                arrArmy[i] -> dead = true;
+                (arrArmy + i) -> dead = true;
             }
             // delete[] arrArmy;
             sizeArmy = 0;
@@ -1092,12 +1088,12 @@ ArmyKnights::ArmyKnights(const string &file_armyknights)
     fp.open(file_armyknights);
     fp >> sizeArmy;
     sizeInitial = sizeArmy;
-    arrArmy = new BaseKnight*[sizeArmy];
+    arrArmy = new BaseKnight[sizeArmy];
     int hp, level, phoenixdownI, gil, antidote;
     for (int i = 0; i < sizeArmy; i++)
     {
         fp >> hp >> level >> phoenixdownI >> gil >> antidote;
-        arrArmy[i] = create(i + 1, hp, level, gil, antidote, phoenixdownI);
+        arrArmy[i] = *create(i + 1, hp, level, gil, antidote, phoenixdownI);
     }
     fp.close();
 

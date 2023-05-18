@@ -27,7 +27,7 @@ public:
     BaseKnight *knight;
     BaseItem *head;
     int sizeBag;
-    BaseBag(BaseKnight * otherKnight);
+    BaseBag();
     ~BaseBag();
 
     void insertBag(ItemType item);
@@ -98,9 +98,9 @@ public:
 
     void setBag(ItemType item, int size);
     BaseBag *getBag() { return bag; }
-    void set2(BaseKnight * otherKnight)
+    void set2()
     {
-        bag = new BaseBag(otherKnight);
+        bag = new BaseBag();
     }
 
     static BaseKnight *create(int id, int maxhp, int level, int gil, int antidote, int phoenixdownI);
@@ -604,4 +604,4 @@ public:
     void run();
 };
 
-#endif // __KNIGHT2_H__ 
+#endif // __KNIGHT2_H__
